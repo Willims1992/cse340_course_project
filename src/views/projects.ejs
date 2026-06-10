@@ -1,14 +1,31 @@
 <%- include('partials/header') %>
+
     <main>
         <h1>
             <%= title %>
         </h1>
-        <!-- Put your page-specific content here -->
+
         <h2>Upcoming Service Projects</h2>
-        <ul>
-            <li>Park Cleanup - Join us to clean up local parks and make them beautiful!</li>
-            <li>Food Drive - Help collect and distribute food to those in need.</li>
-            <li>Community Tutoring - Volunteer to tutor students in various subjects.</li>
-        </ul>
+
+        <% if (projects && projects.length> 0) { %>
+            <ul>
+                <% projects.forEach(project=> { %>
+                    <li>
+                        <% const formattedDate=new Date(project.date).toLocaleDateString('en-US', { year: 'numeric' ,
+                            month: 'long' , day: 'numeric' }); %>
+
+                            <strong>
+                                <%= formattedDate %>:
+                                    <%= project.title %>
+                                        (<%= project.organization_name %>)
+                            </strong>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } else { %>
+                <p>No projects available.</p>
+                <% } %>
     </main>
+
     <%- include('partials/footer') %>
+        
