@@ -1,4 +1,4 @@
-
+import { showProjectDetailsPage } from './controllers/projects.js';
 import { showOrganizationDetailsPage } from './controllers/organizations.js';
 import express from 'express';
 
@@ -16,6 +16,7 @@ router.get('/projects', showProjectsPage);
 router.get('/categories', showCategoriesPage);
 // Route for organization details page
 router.get('/organization/:id', showOrganizationDetailsPage);
+router.get('/project/:id', showProjectDetailsPage);
 
 // error-handling routes
 router.get('/test-error', testErrorPage);

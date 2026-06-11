@@ -5,27 +5,25 @@
             <%= title %>
         </h1>
 
-        <h2>Upcoming Service Projects</h2>
+        <ul>
+            <% projects.forEach(project=> { %>
+                <li>
+                    <!-- Project Link -->
+                    <a href="/project/<%= project.project_id %>">
+                        <%= project.title %>
+                    </a>
 
-        <% if (projects && projects.length> 0) { %>
-            <ul>
-                <% projects.forEach(project=> { %>
-                    <li>
-                        <% const formattedDate=new Date(project.date).toLocaleDateString('en-US', { year: 'numeric' ,
-                            month: 'long' , day: 'numeric' }); %>
-
-                            <strong>
-                                <%= formattedDate %>:
-                                    <%= project.title %>
-                                        (<%= project.organization_name %>)
-                            </strong>
-                    </li>
-                    <% }) %>
-            </ul>
-            <% } else { %>
-                <p>No projects available.</p>
-                <% } %>
+                    <!-- Organization Link -->
+                    (
+                    <a href="/organization/<%= project.organization_id %>">
+                        <%= project.organization_name %>
+                    </a>
+                    )
+                </li>
+                <% }) %>
+        </ul>
     </main>
 
     <%- include('partials/footer') %>
+        
         
