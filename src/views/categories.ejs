@@ -1,16 +1,24 @@
 <%- include('partials/header') %>
+
     <main>
         <h1>
             <%= title %>
         </h1>
-        <!-- Put your page-specific content here -->
-        <h2>Service Project Categories.</h2>
-        <ul>
-            <li>Environmental</li>
-            <li>Educational</li>
-            <li>Community Service</li>
-            <li>Health & Wellness</li>
-        </ul>
+
+        <h2>Service Project Categories</h2>
+
+        <% if (categories && categories.length> 0) { %>
+            <ul>
+                <% categories.forEach(category=> { %>
+                    <li>
+                        <%= category.name %>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } else { %>
+                <p>No categories available.</p>
+                <% } %>
     </main>
+
     <%- include('partials/footer') %>
 

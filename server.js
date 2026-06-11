@@ -9,6 +9,8 @@ import { getAllOrganizations } from './src/models/organizations.js';
 
 import { getAllProjects } from './src/models/projects.js';
 
+import { getAllCategories } from './src/models/categories.js';
+
 // Environment
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -55,8 +57,12 @@ app.get('/projects', async (req, res) => {
 
 
 
-app.get('/categories', (req, res) => {
-    res.render('categories', { title: 'Service Project Categories' });
+app.get('/categories', async (req, res) => {
+    const categories = await getAllCategories();
+    res.render('categories', {
+        title: 'Categories',
+        categories
+    });
 });
 
 app.listen(PORT, async () => {

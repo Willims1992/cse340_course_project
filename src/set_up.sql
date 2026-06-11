@@ -1,4 +1,6 @@
--- Drop tables correctly
+-- Drop tables correctly (child → parent)
+DROP TABLE IF EXISTS project_category;
+DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS service_project;
 DROP TABLE IF EXISTS organization;
 
@@ -50,6 +52,60 @@ VALUES
 (3, 'Clothing Donation', 'Collecting clothes for the needy', 'Seattle', '2026-07-10'),
 (3, 'Charity Run', 'Fundraising marathon', 'Denver', '2026-08-18');
 
--- Verify
-SELECT * FROM organization;
-SELECT * FROM service_project
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE
+);
+
+
+
+
+CREATE TABLE project_category (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+
+    PRIMARY KEY (project_id, category_id),
+
+    FOREIGN KEY (project_id)
+        REFERENCES service_project(project_id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (category_id)
+        REFERENCES category(category_id)
+        ON DELETE CASCADE
+);
+
+INSERT INTO category (name) VALUES
+('Environment'),
+('Health'),
+('Education'),
+('Community Service');
+
+INSERT INTO project_category (project_id, category_id) VALUES
+(1, 1),  -- Community Clean-Up → Environment
+(1, 4),
+
+(2, 4),  -- Food Drive → Community Service
+
+(3, 1),  -- Tree Planting → Environment
+
+(4, 3),  -- School Supplies → Education
+
+(5, 2),  -- Health Outreach → Health
+
+(6, 4),
+
+(7, 4),
+(8, 4),
+
+(9, 1);
+
+
+SELECT
+    sp.title,
+    c.name AS category
+FROM service_project sp
+JOIN project_category pc ON sp.project_id = pc.project_id
+JOIN category c ON pc.category_id = c.category_id
+ORDER BY sp.title;
+
