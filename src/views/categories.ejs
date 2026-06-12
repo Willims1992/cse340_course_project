@@ -5,19 +5,15 @@
             <%= title %>
         </h1>
 
-        <h2>Service Project Categories</h2>
-
-        <% if (categories && categories.length> 0) { %>
-            <ul>
-                <% categories.forEach(category=> { %>
-                    <li>
+        <ul>
+            <% categories.forEach(category=> { %>
+                <li>
+                    <a href="/category/<%= category.category_id %>">
                         <%= category.name %>
-                    </li>
-                    <% }) %>
-            </ul>
-            <% } else { %>
-                <p>No categories available.</p>
-                <% } %>
+                    </a>
+                </li>
+                <% }) %>
+        </ul>
     </main>
 
     <%- include('partials/footer') %>
