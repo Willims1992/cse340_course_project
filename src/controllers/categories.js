@@ -1,12 +1,61 @@
-import { getAllCategories } from '../models/categories.js';
+import { body } from 'express-validator';
+
 import {
+    getAllCategories,
     getCategoryById,
     getProjectsByCategoryId,
     getCategoriesByServiceProjectId,
-    updateCategoryAssignments
+    updateCategoryAssignments,
+    createCategory,
+    updateCategory
 } from '../models/categories.js';
 
 import { getProjectDetails } from '../models/projects.js';
+
+const categoryValidation = [
+    body('name')
+        .trim()
+        .isLength({ min: 3, max: 100 })
+        .withMessage('Category name must be between 3 and 100 characters')
+];
+
+const showNewCategoryForm = (req, res) => {
+    res.render('new-category', { title: 'Create Category' });
+};
+
+const processNewCategoryForm = async (req, res) => {
+    const { name } = req.body;
+
+    await createCategory(name);
+
+    req.flash('success', 'Category created successfully');
+
+    res.redirect('/categories');
+};
+
+const showEditCategoryForm = async (req, res) => {
+    const id = req.params.id;
+
+    const category = await getCategoryById(id);
+
+    res.render('edit-category', {
+        title: 'Edit Category',
+        category
+    });
+};
+
+const processEditCategoryForm = async (req, res) => {
+    const id = req.params.id;
+    const { name } = req.body;
+
+    await updateCategory(id, name);
+
+    req.flash('success', 'Category updated successfully');
+
+    res.redirect('/categories');
+};
+
+
 
 // Categories list
 const showCategoriesPage = async (req, res) => {
@@ -74,5 +123,10 @@ export {
     showCategoriesPage,
     showCategoryDetailsPage,
     showAssignCategoriesForm,
-    processAssignCategoriesForm
+    processAssignCategoriesForm,
+    categoryValidation,
+    showNewCategoryForm,
+    processNewCategoryForm,
+    showEditCategoryForm,
+    processEditCategoryForm
 };
