@@ -26,7 +26,7 @@ const app = express();
 
 // Set up session management
 app.use(session({
-    secret: SESSION_SECRET,
+    secret: SESSION_SECRET ||'fallbackSecret123', // Use a fallback secret if SESSION_SECRET is not set
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
@@ -59,12 +59,20 @@ app.use((req, res, next) => {
     next();
 });
 
+// Middleware to make flash messages available in all templates
+app.use((req, res, next) => {
+    res.locals.messages = req.session.flash || {};
+    next();
+});
+
 /**
  * Routes
  */
 
 // Use the imported router to handle routes
 app.use(router);
+
+
 
 
 

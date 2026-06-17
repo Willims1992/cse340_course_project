@@ -15,8 +15,10 @@ import { getProjectDetails } from '../models/projects.js';
 const categoryValidation = [
     body('name')
         .trim()
+        .notEmpty().withMessage('Name is required')
         .isLength({ min: 3, max: 100 })
         .withMessage('Category name must be between 3 and 100 characters')
+
 ];
 
 const showNewCategoryForm = (req, res) => {
