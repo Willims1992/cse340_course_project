@@ -21,13 +21,15 @@
     </nav>
 
 
-<% if (messages) { %>
-    <% Object.keys(messages).forEach(type=> { %>
-        <% messages[type].forEach(msg=> { %>
-            <div class="alert alert-<%= type %>">
-                <%= msg %>
-            </div>
-            <% }) %>
+<% const messages=flash(); %>
+
+    <% if (messages) { %>
+        <% Object.keys(messages).forEach(type=> { %>
+            <% messages[type].forEach(msg=> { %>
+                <div class="alert alert-<%= type %>">
+                    <%= msg %>
+                </div>
                 <% }) %>
-                    <% } %>
+                    <% }) %>
+                        <% } %>
     

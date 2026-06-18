@@ -153,8 +153,8 @@ JOIN roles r ON u.role_id = r.role_id;
 SELECT sp.title, sp.date, o.name AS organization
 FROM service_project sp
 JOIN organization o ON sp.organization_id = o.organization_id
-WHERE sp.date >= CURRENT_DATE
-ORDER BY sp.date;
+--WHERE sp.date >= CURRENT_DATE
+ORDER BY sp.date DESC;
 
 
 
