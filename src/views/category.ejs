@@ -18,15 +18,17 @@
                             <%= project.title %>
                         </a>
                     </li>
-                    <% }) %>
+                <% }) %>
             </ul>
-            <% } else { %>
+        <% } else { %>
                 <p>No projects found for this category.</p>
-                <% } %>
+            <% } %>
 
-        <a href="/edit-category/<%= category.category_id %>">
-            Edit Category
-        </a>
+        
+
+        <% if (user && user.role_name==='admin' ) { %>
+            <a href="/edit-category/<%= category.category_id %>">Edit Category</a>
+        <% } %>
     </main>
 
     <%- include('partials/footer') %>
