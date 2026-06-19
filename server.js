@@ -1,12 +1,14 @@
+
 import flash from './src/middleware/flash.js';
 import session from 'express-session';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
+
 import { testConnection } from './src/models/db.js';
 
-import router from './src/routes.js';
+import routes from './src/routes.js';
 
 
 // Environment
@@ -26,7 +28,7 @@ const app = express();
 
 // Set up session management
 app.use(session({
-    secret: SESSION_SECRET ||'fallbackSecret123', // Use a fallback secret if SESSION_SECRET is not set
+    secret: SESSION_SECRET || 'fallbackSecret123', // Use a fallback secret if SESSION_SECRET is not set
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 60 * 60 * 1000 } // Session expires after 1 hour of inactivity
@@ -65,12 +67,13 @@ app.use((req, res, next) => {
     next();
 });
 
+
 /**
  * Routes
  */
 
 // Use the imported router to handle routes
-app.use(router);
+app.use('/', routes);
 
 
 

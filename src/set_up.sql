@@ -100,6 +100,13 @@ INSERT INTO project_category (project_id, category_id) VALUES
 (8, 4),
 (9, 1);
 
+-- View projects (future only)
+SELECT sp.title, sp.date, o.name AS organization
+FROM service_project sp
+JOIN organization o ON sp.organization_id = o.organization_id
+--WHERE sp.date >= CURRENT_DATE
+ORDER BY sp.date;
+
 -- ========================================
 -- ROLES TABLE
 -- ========================================
@@ -123,7 +130,7 @@ CREATE TABLE users (
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    role_id INTEGER,
+    role_id INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (role_id)
         REFERENCES roles(role_id)
@@ -138,23 +145,16 @@ ON CONFLICT (email) DO NOTHING;
 -- VERIFY DATA
 -- ========================================
 
--- View all users
-SELECT * FROM users;
+-
 
--- View roles
-SELECT * FROM roles;
-
--- Join users and roles
+-- Join users and roles to see complete information
 SELECT u.user_id, u.name, u.email, r.role_name, r.role_description
 FROM users u
 JOIN roles r ON u.role_id = r.role_id;
 
--- View projects (future only)
-SELECT sp.title, sp.date, o.name AS organization
-FROM service_project sp
-JOIN organization o ON sp.organization_id = o.organization_id
---WHERE sp.date >= CURRENT_DATE
-ORDER BY sp.date DESC;
+-- Delete the test user
+DELETE FROM users WHERE email = 'test@example.com';
+
 
 
 
