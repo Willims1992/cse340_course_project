@@ -1,4 +1,5 @@
 import db from './db.js'
+import bcrypt from 'bcrypt';
 
 const createUser = async (name, email, passwordHash) => {
     const default_role = 'user';
@@ -73,6 +74,5 @@ const authenticateUser = async (email, password) => {
     }
 };
 
-// ✅ ONLY export this function
 
 export { createUser, authenticateUser, };

@@ -1,6 +1,8 @@
 import express from 'express';
 import { showUserRegistrationForm, processUserRegistrationForm } from './controllers/users.js';
 
+import { showLoginForm, processLoginForm, processLogout } from './controllers/users.js';
+
 import { showHomePage } from './controllers/index.js';
 import {
     showOrganizationsPage,
@@ -51,6 +53,12 @@ router.get('/categories', showCategoriesPage);
 // Registration (VERY IMPORTANT placement)
 router.get('/register', showUserRegistrationForm);
 router.post('/register', processUserRegistrationForm);
+
+
+// User login routes
+router.get('/login', showLoginForm);
+router.post('/login', processLoginForm);
+router.get('/logout', processLogout);
 
 // Forms (static paths)
 router.get('/new-organization', showNewOrganizationForm);

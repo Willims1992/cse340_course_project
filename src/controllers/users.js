@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { createUser } from '../models/users.js';
+import { authenticateUser } from '../models/users.js';
 
 const showUserRegistrationForm = (req, res) => {
     res.render('register', { title: 'Register' });
@@ -20,7 +21,7 @@ const processUserRegistrationForm = async (req, res) => {
         req.flash('success', 'Registration successful! Please log in.');
         res.redirect('/');
     } catch (error) {
-        console.error('❌ FULL ERROR:', error); // <-- IMPORTANT
+        console.error('Error during registration:', error);
         req.flash('error', 'An error occurred during registration. Please try again.');
         res.redirect('/register');
     }
@@ -56,13 +57,53 @@ const processLoginForm = async (req, res) => {
     }
 };
 
-const processLogout = async (req, res) => {
+/*const processLogout = async (req, res) => {
     if (req.session.user) {
         delete req.session.user;
     }
 
     req.flash('success', 'Logout successful!');
     res.redirect('/login');
+
+
 };
 
-export { showUserRegistrationForm, processUserRegistrationForm, showLoginForm, processLoginForm, processLogout };
+const processLogout = (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Logout error:', err);
+            return res.redirect('/');
+        }
+
+        res.clearCookie('connect.sid'); // ✅ remove session cookie
+        req.flash('success', 'Logout successful!');
+        res.redirect('/login');
+    });
+};*/
+
+const processLogout = (req, res) => {
+
+    // ✅ Save message manually BEFORE removing session
+    if (req.session) {
+        req.session.flash = {
+            success: ['Logout successful!']
+        };
+    }
+
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Logout error:', err);
+            return res.redirect('/');
+        }
+
+        res.clearCookie('connect.sid');
+        res.redirect('/login');
+    });
+};
+
+
+
+export {
+    showUserRegistrationForm, processUserRegistrationForm,
+    showLoginForm, processLoginForm, processLogout
+};
