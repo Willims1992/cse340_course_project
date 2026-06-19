@@ -39,11 +39,6 @@ const findUserByEmail = async (email) => {
     return result.rows[0];
 };
 
-const verifyPassword = async (password, passwordHash) => {
-    return bcrypt.compare(password, passwordHash);
-};
-
-
 // ✅ Helper function (NOT exported)
 const verifyPassword = async (password, hash) => {
     return await bcrypt.compare(password, hash);
