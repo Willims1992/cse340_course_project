@@ -1,6 +1,6 @@
 
 import express from 'express';
-import{requireRole} from './controllers/users.js'; 
+import{requireRole, showUsersPage} from './controllers/users.js'; 
 import { showUserRegistrationForm, processUserRegistrationForm } from './controllers/users.js';
 
 import { showLoginForm, processLoginForm, processLogout } from './controllers/users.js';
@@ -65,6 +65,7 @@ router.get('/logout', processLogout);
 
 // Protected dashboard route
 router.get('/dashboard', requireLogin, showDashboard);
+router.get('/users', requireRole('admin'), showUsersPage);
 
 // Forms (static paths)
 router.get('/new-organization', requireRole('admin'), showNewOrganizationForm);
@@ -91,6 +92,8 @@ router.post('/edit-category/:id', requireRole('admin'), categoryValidation, proc
 //router.post('/assign-categories/:projectId', requireRole('admin'), processAssignCategoriesForm);
 router.get('/project/:projectId/assign-categories', requireRole('admin'), showAssignCategoriesForm);
 router.post('/project/:projectId/assign-categories', requireRole('admin'), processAssignCategoriesForm);
+
+
 
 // Error test
 router.get('/test-error', testErrorPage);
