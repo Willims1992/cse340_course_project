@@ -48,14 +48,20 @@ VALUES
 (1, 'Community Clean-Up', 'Cleaning local parks and streets', 'New York', '2026-06-15'),
 (1, 'Food Drive', 'Collecting food donations', 'Chicago', '2026-07-01'),
 (1, 'Tree Planting', 'Planting trees in urban areas', 'Los Angeles', '2026-08-10'),
+(1, 'Beach Restoration', 'Restoring local beaches and marine habitats', 'Miami', '2026-06-18'),
+(1, 'Recycling Initiative', 'Promoting recycling in schools', 'San Francisco', '2026-07-20'),
 
 (2, 'School Supplies Donation', 'Providing school kits for children', 'Texas', '2026-06-20'),
 (2, 'Health Outreach', 'Free medical checkups', 'Florida', '2026-07-15'),
 (2, 'Community Workshop', 'Skill training programs', 'Nevada', '2026-08-05'),
+(2, 'Urban Gardening', 'Creating community gardens', 'Arizona', '2026-06-30'),
+(2, 'Water Conservation Campaign', 'Educating about water-saving techniques', 'Colorado', '2026-07-25'),
 
 (3, 'Volunteer Recruitment', 'Registering new volunteers', 'Boston', '2026-06-25'),
 (3, 'Clothing Donation', 'Collecting clothes for the needy', 'Seattle', '2026-07-10'),
-(3, 'Charity Run', 'Fundraising marathon', 'Denver', '2026-08-18');
+(3, 'Charity Run', 'Fundraising marathon', 'Denver', '2026-08-18'),
+(3, 'Senior Support', 'Assisting elderly in the community', 'Portland', '2026-06-28'),
+(3, 'Youth Mentorship', 'Mentoring programs for youth', 'Atlanta', '2026-07-22');
 
 -- ========================================
 -- CATEGORY TABLE
