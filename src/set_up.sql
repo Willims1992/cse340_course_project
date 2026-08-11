@@ -1,13 +1,13 @@
 -- ========================================
 -- DROP TABLES (correct order: child → parent)
 -- ========================================
-DROP TABLE IF EXISTS project_category;
-DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS service_project;
-DROP TABLE IF EXISTS organization;
+DROP TABLE IF EXISTS project_category CASCADE;
+DROP TABLE IF EXISTS category  CASCADE;
+DROP TABLE IF EXISTS service_project CASCADE;
+DROP TABLE IF EXISTS organization CASCADE;
 
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS roles  CASCADE;
 
 -- ========================================
 -- ORGANIZATION TABLE
@@ -147,29 +147,54 @@ INSERT INTO users (name, email, password_hash, role_id)
 VALUES ('testuser', 'test@example.com', 'placeholder_hash', 1)
 ON CONFLICT (email) DO NOTHING;
 
--- ========================================
--- VERIFY DATA
--- ========================================
+UPDATE service_project
+SET date = '2026-12-01'
+WHERE project_id = 1;
 
--
+UPDATE service_project
+SET date = '2026-12-02'
+WHERE project_id = 2;
+
+UPDATE service_project
+SET date = '2026-12-03'
+WHERE project_id = 3;
+
+UPDATE service_project
+SET date = '2026-12-04'
+WHERE project_id = 4;
+
+UPDATE service_project
+SET date = '2026-12-05'
+WHERE project_id = 5;
+
+INSERT INTO users (name, email, password_hash, role_id) 
+VALUES ('testuser', 'test@example.com', 'placeholder_hash', 1);
+
 
 -- Join users and roles to see complete information
 SELECT u.user_id, u.name, u.email, r.role_name, r.role_description
 FROM users u
 JOIN roles r ON u.role_id = r.role_id;
 
+
 -- Delete the test user
 DELETE FROM users WHERE email = 'test@example.com';
 
--- View all users and roles
 SELECT * FROM users;
 SELECT * FROM roles;
 
--- Update the dedicated admin testing account to have admin role
 UPDATE users SET role_id = (SELECT role_id FROM roles WHERE role_name = 'admin') WHERE email = 'admin@example.com';
 
--- Verify the update by listing all users and their roles
-SELECT users.user_id, users.email, roles.role_name FROM users JOIN roles ON users.role_id = roles.role_id;
+SELECT
+    u.user_id,
+    u.name,
+    u.email,
+    r.role_name
+FROM users u
+JOIN roles r
+    ON u.role_id = r.role_id;
+
+
 
 
 
