@@ -1,3 +1,4 @@
+import 'dotenv/config';
 
 import flash from './src/middleware/flash.js';
 import session from 'express-session';
