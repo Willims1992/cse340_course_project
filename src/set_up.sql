@@ -167,14 +167,15 @@ UPDATE service_project
 SET date = '2026-12-05'
 WHERE project_id = 5;
 
-INSERT INTO users (name, email, password_hash, role_id) 
-VALUES ('testuser', 'test@example.com', 'placeholder_hash', 1);
-
 
 -- Join users and roles to see complete information
 SELECT u.user_id, u.name, u.email, r.role_name, r.role_description
 FROM users u
 JOIN roles r ON u.role_id = r.role_id;
+
+UPDATE users
+SET role_id = 2
+WHERE email = 'admin@example.com';
 
 
 -- Delete the test user

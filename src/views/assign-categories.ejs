@@ -1,27 +1,45 @@
 <%- include('partials/header') %>
-    <main>
-        <h1>
-            <%= projectDetails.title %>
-        </h1>
 
-        <h2>Assign Categories</h2>
-        <form action="/assign-categories/<%= projectId %>" method="POST">
+<main>
+    <h1><%= projectDetails.title %></h1>
+<h2>Assign Categories</h2>
 
-            <div class="form-group">
-                <% categories.forEach(category=> { %>
-                    <div>
-                        <input type="checkbox" id="category-<%= category.category_id %>" name="categoryIds"
-                            value="<%= category.category_id %>" <%=assignedCategories.some(ac=> ac.category_id ===
-                        category.category_id) ? 'checked' : '' %>
-                        />
-                        <label for="category-<%= category.category_id %>">
-                            <%= category.name %>
-                        </label>
-                    </div>
-                    <% }); %>
-            </div>
+<% if (categories && categories.length > 0) { %>
+    <form action="/project/<%= projectId %>/assign-categories" method="POST">
+        <div class="form-group">
+            <% categories.forEach(category => { %>
+                <div>
+                    <input
+                        type="checkbox"
+                        id="category-<%= category.category_id %>"
+                        name="categories"
+                        value="<%= category.category_id %>"
+                        <%= assignedCategories.some(
+                            ac => String(ac.category_id) === String(category.category_id)
+                        ) ? 'checked' : '' %>
+                    >
 
-            <button type="submit">Update Categories</button>
+                    <label for="category-<%= category.category_id %>">
+                        <%= category.name %>
+                    </label>
+                </div>
+            <% }) %>
+        </div>
 
-    </main>
-    <%- include('partials/footer') %>
+        <button type="submit">Update Categories</button>
+    </form>
+<% } else { %>
+    <p>No categories have been created yet.</p>
+    <% if (user && user.role_name === 'admin') { %>
+        <p><a href="/new-category">Create a Category</a></p>
+    <% } %>
+<% } %>
+
+<p>
+    <a href="/project/<%= projectId %>">Back to Project</a>
+</p>
+
+
+</main>
+
+<%- include('partials/footer') %>

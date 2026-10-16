@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, validationResult  } from 'express-validator';
 
 import {
     getAllCategories,
@@ -21,18 +21,33 @@ const categoryValidation = [
 
 ];
 
-const showNewCategoryForm = (req, res) => {
+const showNewCategoryForm = (_req, res) => {
     res.render('new-category', { title: 'Create Category' });
 };
 
-const processNewCategoryForm = async (req, res) => {
-    const { name } = req.body;
 
-    await createCategory(name);
+const processNewCategoryForm = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
 
-    req.flash('success', 'Category created successfully');
+        if (!errors.isEmpty()) {
+            return res.status(400).render('new-category', {
+                title: 'Create Category',
+                errors: errors.array(),
+                name: req.body.name
+            });
+        }
 
-    res.redirect('/categories');
+        const { name } = req.body;
+
+        await createCategory(name);
+
+        req.flash('success', 'Category created successfully');
+
+        return res.redirect('/categories');
+    } catch (error) {
+        next(error);
+    }
 };
 
 const showEditCategoryForm = async (req, res) => {
@@ -46,15 +61,48 @@ const showEditCategoryForm = async (req, res) => {
     });
 };
 
-const processEditCategoryForm = async (req, res) => {
-    const id = req.params.id;
-    const { name } = req.body;
 
-    await updateCategory(id, name);
+const processEditCategoryForm = async (req, res, next) => {
+    try {
+        const id = req.params.id;
 
-    req.flash('success', 'Category updated successfully');
+        const errors = validationResult(req);
 
-    res.redirect('/categories');
+        if (!errors.isEmpty()) {
+            const category = await getCategoryById(id);
+
+            if (!category) {
+                return res.status(404).render('errors/404', {
+                    title: 'Page Not Found'
+                });
+            }
+
+            return res.status(400).render('edit-category', {
+                title: 'Edit Category',
+                category: {
+                    ...category,
+                    name: req.body.name
+                },
+                errors: errors.array()
+            });
+        }
+
+        const category = await getCategoryById(id);
+
+        if (!category) {
+            return res.status(404).render('errors/404', {
+                title: 'Page Not Found'
+            });
+        }
+
+        await updateCategory(id, req.body.name);
+
+        req.flash('success', 'Category updated successfully');
+
+        return res.redirect('/categories');
+    } catch (error) {
+        next(error);
+    }
 };
 
 

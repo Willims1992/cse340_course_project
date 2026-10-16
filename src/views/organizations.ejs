@@ -1,38 +1,55 @@
 <%- include('partials/header') %>
 
-    <main>
-        <h1>
-            <%= title %>
-        </h1>
+<main>
+    <h1><%= title %></h1>
 
-        <p>Here are a few of our partner organizations:</p>
+<p>Here are a few of our partner organizations:</p>
 
-        <ul>
-            <% organizations.forEach(organization=> { %>
-                <li>
-                    <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo"
-                        width="80" height="100"><a href="/organization/<%= organization.organization_id %>">
-                            <%= organization.name %>
-                        </a>
+<% if (user && user.role_name === 'admin') { %>
+    <p>
+        <a href="/new-organization">Add New Organization</a>
+    </p>
+<% } %>
 
-                    <h2>
+<% if (organizations && organizations.length > 0) { %>
+    <ul>
+        <% organizations.forEach(organization => { %>
+            <li>
+                <img
+                    src="/images/<%= organization.logo_filename %>"
+                    alt="<%= organization.name %> logo"
+                    width="80"
+                    height="100"
+                >
+
+                <h2>
+                    <a href="/organization/<%= organization.organization_id %>">
                         <%= organization.name %>
-                    </h2>
+                    </a>
+                </h2>
 
+                <p><%= organization.description %></p>
+
+                <p>
+                    <strong>Email:</strong>
+                    <%= organization.contact_email %>
+                </p>
+
+                <% if (user && user.role_name === 'admin') { %>
                     <p>
-                        <%= organization.description %>
+                        <a href="/edit-organization/<%= organization.organization_id %>">
+                            Edit Organization
+                        </a>
                     </p>
+                <% } %>
+            </li>
+        <% }) %>
+    </ul>
+<% } else { %>
+    <p>No organizations are available.</p>
+<% } %>
 
-                    <p><strong>Email:</strong>
-                        <%= organization.contact_email %>
-                    </p>
-                </li>
-                <% }); %>
-        </ul>
 
-        <% if (user && user.role_name==='admin' ) { %>
-           <p><a href="/new-organization">Add New Organization</a></p>
-        <% } %>
-    </main>
+</main>
 
 <%- include('partials/footer') %>
