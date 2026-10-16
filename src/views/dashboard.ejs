@@ -1,20 +1,74 @@
 <%- include('partials/header') %>
 
-    <main>
-        <h1>
-            <%= title %>
-        </h1>
+<main>
+    <h1><%= title %></h1>
 
-        <h2>Dashboard</h2>
+    <h2>Dashboard</h2>
 
-        <p>Name: <%= user.name %></p>
-        <p>Username: <%= user.email %></p>
-        <p>Role: <%= user.role_name %></p>
+    <p>Name: <%= user.name %></p>
+    <p>Username: <%= user.email %></p>
+    <p>Role: <%= user.role_name %></p>
 
-        <% if (user && user.role_name==='admin' ) { %>
-            <p><a href="/users"> Users</a></p>
+    <% if (user && user.role_name === 'admin') { %>
+        <p>
+            <a href="/users">Users</a>
+        </p>
+    <% } %>
+
+    <!-- Volunteer Projects -->
+    <section>
+        <h2>My Volunteer Projects</h2>
+
+        <% if (volunteeredProjects && volunteeredProjects.length > 0) { %>
+
+            <ul>
+                <% volunteeredProjects.forEach(project => { %>
+                    <li>
+                        <h3>
+                            <a href="/project/<%= project.project_id %>">
+                                <%= project.title %>
+                            </a>
+                        </h3>
+
+                        <p>
+                            <strong>Organization:</strong>
+                            <%= project.organization_name %>
+                        </p>
+
+                        <p>
+                            <strong>Location:</strong>
+                            <%= project.location %>
+                        </p>
+
+                        <p>
+                            <strong>Date:</strong>
+                            <%= new Date(project.date).toLocaleDateString() %>
+                        </p>
+
+                        <form
+                            action="/project/<%= project.project_id %>/remove-volunteer"
+                            method="POST">
+
+                            <button type="submit">
+                                Remove Myself as a Volunteer
+                            </button>
+
+                        </form>
+                    </li>
+                <% }) %>
+            </ul>
+
+        <% } else { %>
+
+            <p>You have not signed up to volunteer for any projects yet.</p>
+
+            <p>
+                <a href="/projects">Browse Service Projects</a>
+            </p>
+
         <% } %>
+    </section>
 
-    </main>
+</main>
 
-    <%- include('partials/footer') %>
+<%- include('partials/footer') %>

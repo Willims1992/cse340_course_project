@@ -1,3 +1,5 @@
+import { getVolunteeredProjectsByUserId } from '../models/volunteers.js';
+
 import bcrypt from 'bcrypt';
 import { createUser } from '../models/users.js';
 import { authenticateUser } from '../models/users.js';
@@ -119,11 +121,35 @@ const requireLogin = (req, res, next) => {
     //});
 //};
 
-const showDashboard = (req, res) => {
-    res.render('dashboard', {
-        title: 'Dashboard',
-        user: req.session.user   // ✅ pass full user
-    });
+// Show the dashboard and the user's volunteered projects
+const showDashboard = async (req, res) => {
+    const user = req.session.user;
+
+    try {
+        // Get all projects this user has volunteered for
+        const volunteeredProjects =
+            await getVolunteeredProjectsByUserId(user.user_id);
+
+        // Render the dashboard
+        res.render('dashboard', {
+            title: 'Dashboard',
+            user,
+            volunteeredProjects
+        });
+    } catch (error) {
+        console.error('Error loading volunteered projects:', error);
+
+        req.flash(
+            'error',
+            'Unable to load your volunteer projects. Please try again.'
+        );
+
+        res.render('dashboard', {
+            title: 'Dashboard',
+            user,
+            volunteeredProjects: []
+        });
+    }
 };
 
 /**

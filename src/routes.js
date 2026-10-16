@@ -1,3 +1,7 @@
+import {
+    processAddVolunteer,
+    processRemoveVolunteer
+} from './controllers/volunteers.js';
 
 import express from 'express';
 import{requireRole, showUsersPage} from './controllers/users.js'; 
@@ -92,6 +96,20 @@ router.post('/edit-category/:id', requireRole('admin'), categoryValidation, proc
 //router.post('/assign-categories/:projectId', requireRole('admin'), processAssignCategoriesForm);
 router.get('/project/:projectId/assign-categories', requireRole('admin'), showAssignCategoriesForm);
 router.post('/project/:projectId/assign-categories', requireRole('admin'), processAssignCategoriesForm);
+
+// Volunteer for a service project
+router.post(
+    '/project/:projectId/volunteer',
+    requireLogin,
+    processAddVolunteer
+);
+
+// Withdraw from a service project
+router.post(
+    '/project/:projectId/remove-volunteer',
+    requireLogin,
+    processRemoveVolunteer
+);
 
 
 

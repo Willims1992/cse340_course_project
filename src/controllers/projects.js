@@ -1,5 +1,6 @@
 
 // Import any needed model functions
+import { isUserVolunteering } from '../models/volunteers.js';
 import { getCategoriesByServiceProjectId } from '../models/categories.js';
 
 import { getUpcomingProjects, getProjectDetails } from '../models/projects.js'
@@ -43,22 +44,32 @@ const showProjectsPage = async (req, res) => {
     });
 };
 
-
-//  NEW controller for project details page
+// Show project details and the logged-in user's volunteer status
 const showProjectDetailsPage = async (req, res) => {
-    // Get ID from URL
+    // Get the project ID from the URL
     const id = req.params.id;
 
-    // Get project from database
+    // Get project information from the database
     const project = await getProjectDetails(id);
 
+    // Get the categories assigned to this project
     const categories = await getCategoriesByServiceProjectId(id);
 
-    // Render view
+    // Check whether the logged-in user is volunteering
+    const userId = req.session.user?.user_id;
+
+    let isVolunteering = false;
+
+    if (userId) {
+        isVolunteering = await isUserVolunteering(userId, id);
+    }
+
+    // Render the project details page
     res.render('project', {
         title: project.title,
         project,
-        categories
+        categories,
+        isVolunteering
     });
 };
 

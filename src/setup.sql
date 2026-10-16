@@ -1,6 +1,7 @@
 -- ========================================
 -- DROP TABLES (correct order: child → parent)
 -- ========================================
+DROP TABLE IF EXISTS project_volunteer CASCADE;
 DROP TABLE IF EXISTS project_category CASCADE;
 DROP TABLE IF EXISTS category  CASCADE;
 DROP TABLE IF EXISTS service_project CASCADE;
@@ -140,6 +141,25 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (role_id)
         REFERENCES roles(role_id)
+);
+
+-- ========================================
+-- PROJECT VOLUNTEER TABLE
+-- ========================================
+CREATE TABLE project_volunteer (
+    user_id INTEGER NOT NULL,
+    project_id INTEGER NOT NULL,
+    volunteered_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (user_id, project_id),
+
+    FOREIGN KEY (user_id)
+        REFERENCES users(user_id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (project_id)
+        REFERENCES service_project(project_id)
+        ON DELETE CASCADE
 );
 
 -- Insert Test User (safe)
